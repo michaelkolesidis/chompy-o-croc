@@ -3,7 +3,7 @@ import Phaser from "phaser";
 export default class StartScene extends Phaser.Scene {
   // Images
   background!: Phaser.GameObjects.Image;
-  head!: Phaser.GameObjects.Image;
+  running!: Phaser.GameObjects.Image;
 
   // Texts
   title!: Phaser.GameObjects.BitmapText;
@@ -23,7 +23,7 @@ export default class StartScene extends Phaser.Scene {
       "./assets/fonts/thick_8x8.xml"
     );
     this.load.image("sky", "./assets/images/sky.png");
-    this.load.image("head", "./assets/images/head.png");
+    this.load.image("running", "./assets/images/running.png");
   }
 
   create() {
@@ -41,10 +41,10 @@ export default class StartScene extends Phaser.Scene {
     );
     this.titleShadow.setTint(0x000000);
     this.title = this.add.bitmapText(30, 20, "Thick", "CHOMPY\nO'CROC", 30, 1);
-    this.head = this.add.image(100, 47, "head").setScale(2);
+    this.running = this.add.image(87, 12, "running").setScale(1);
 
     // Prompt
-    this.promptText = this.add.bitmapText(38, 150, "Thick", "PRESS ENTER", 15);
+    this.promptText = this.add.bitmapText(38, 130, "Thick", "PRESS ENTER", 15);
 
     this.blinkTween = this.tweens.add({
       targets: this.promptText,
