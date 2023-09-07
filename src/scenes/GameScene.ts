@@ -49,7 +49,6 @@ export default class GameScene extends Phaser.Scene {
       "./assets/fonts/thick_8x8.xml"
     );
 
-    this.load.image("logo", "./assets/images/logo.png");
     this.load.image("sky", "./assets/images/sky.png");
     this.load.image("ground", "./assets/images/platform.png");
     this.load.image("star", "./assets/images/star.png");
