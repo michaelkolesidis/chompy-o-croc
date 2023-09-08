@@ -31,6 +31,12 @@ export default class GameScene extends Phaser.Scene {
   gameOverText!: Phaser.GameObjects.BitmapText;
   restartText!: Phaser.GameObjects.BitmapText;
 
+  // Audio
+  soundtrack!:
+    | Phaser.Sound.HTML5AudioSound
+    | Phaser.Sound.NoAudioSound
+    | Phaser.Sound.WebAudioSound;
+
   constructor() {
     super({ key: "GameScene" });
     this.score = 0;
@@ -43,25 +49,35 @@ export default class GameScene extends Phaser.Scene {
   }
 
   preload() {
+    // Fonts
     this.load.bitmapFont(
       "Thick",
       "./assets/fonts/thick_8x8.png",
       "./assets/fonts/thick_8x8.xml"
     );
-
+    // Images
     this.load.image("sky", "./assets/images/sky.png");
     this.load.image("ground", "./assets/images/platform.png");
     this.load.image("star", "./assets/images/star.png");
     this.load.image("bomb", "./assets/images/bomb.png");
     this.load.image("heart", "./assets/images/heart.png");
     this.load.image("hello", "./assets/images/hello.png");
+    // Spritesheets
     this.load.spritesheet("character", "./assets/images/character.png", {
       frameWidth: 18,
       frameHeight: 17,
     });
+    // Audio
+    this.load.audio("soundtrack", "./assets/audio/soundtrack.mp3");
   }
 
   create() {
+    // Soundtrack
+    this.soundtrack = this.sound.add("soundtrack");
+    this.soundtrack.loop = true;
+    this.soundtrack.volume = 0.85;
+    this.soundtrack.play();
+
     //  Background
     this.background = this.add.image(0, 0, "sky").setOrigin(0, 0);
 
@@ -159,7 +175,6 @@ export default class GameScene extends Phaser.Scene {
     this.physics.add.overlap(
       this.player,
       this.stars,
-      // @ts-ignore
       this.collectStar,
       undefined,
       this
@@ -167,7 +182,6 @@ export default class GameScene extends Phaser.Scene {
     this.physics.add.collider(
       this.player,
       this.bombs,
-      // @ts-ignore
       this.hitBomb,
       undefined,
       this
@@ -242,14 +256,16 @@ export default class GameScene extends Phaser.Scene {
 
   // What happens when the player collects a star
   collectStar(
-    player: Phaser.GameObjects.GameObject,
-    star: Phaser.GameObjects.GameObject
+    player:
+      | Phaser.Types.Physics.Arcade.GameObjectWithBody
+      | Phaser.Tilemaps.Tile,
+    star: Phaser.Types.Physics.Arcade.GameObjectWithBody | Phaser.Tilemaps.Tile
   ) {
     const starSprite = star as Phaser.Physics.Arcade.Sprite;
     starSprite.disableBody(true, true);
 
     //  Add and update the score
-    this.score += 10 + this.round * 2;
+    this.score += 10 + Math.pow(this.round, 2);
     this.scoreText.setText("SCORE " + this.score);
 
     if (this.stars.countActive(true) === 0) {
@@ -276,7 +292,7 @@ export default class GameScene extends Phaser.Scene {
       bomb.setBounce(1);
       bomb.setCollideWorldBounds(true);
       bomb.setVelocity(
-        Phaser.Math.Between(-30 - this.round * 5, 50 + this.round * 5),
+        Phaser.Math.Between(-25 - this.round * 5, 25 + this.round * 5),
         20
       );
       bomb.allowGravity = false;
@@ -285,8 +301,8 @@ export default class GameScene extends Phaser.Scene {
 
   // What happens when the player hits a bomb
   hitBomb(
-    player: Phaser.GameObjects.GameObject,
-    bomb: Phaser.GameObjects.GameObject
+    player: Phaser.GameObjects.GameObject | Phaser.Tilemaps.Tile,
+    bomb: Phaser.GameObjects.GameObject | Phaser.Tilemaps.Tile
   ) {
     // Subract a life
     this.lives -= 1;
@@ -316,7 +332,7 @@ export default class GameScene extends Phaser.Scene {
         break;
       case 0:
         this.heart1.setVisible(false); // Hide the first heart
-        this.endGame(player);
+        this.endGame(player as Phaser.GameObjects.GameObject);
         break;
     }
   }
@@ -335,12 +351,14 @@ export default class GameScene extends Phaser.Scene {
       this.player.anims.play("turnRight");
     }
 
+    this.soundtrack.stop();
     this.gameOver = true;
     this.gameOverText.setVisible(true);
     this.restartText.setVisible(true);
 
     document.addEventListener("keydown", (e) => {
       if (this.gameOver === true && e.code === "Enter") {
+        // this.soundtrack.stop();
         this.gameOver = false;
         this.round = 0;
         this.direction = "right";
