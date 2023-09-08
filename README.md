@@ -1,3 +1,5 @@
+![Character](./screenshots/character.png)
+
 # Chompy O'Croc
 
 Run and jump around the platforms, collecting stars and avoiding bombs!
@@ -11,7 +13,6 @@ The game was made with Phaser, Vite, and TypeScript.
 ![1](./screenshots/screenshot_1.png)
 ![2](./screenshots/screenshot_2.png)
 ![3](./screenshots/screenshot_3.png)
-![4](./screenshots/screenshot_4.png)
 
 ## Copyright
 
