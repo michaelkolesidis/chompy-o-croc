@@ -35,3 +35,7 @@
 - Eat food
 - Hit by bomb
 - Game over
+
+### High Score
+
+Save high score in local storage and display it on the start screen.

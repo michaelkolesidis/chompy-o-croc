@@ -141,6 +141,11 @@ export default class GameScene extends Phaser.Scene {
       repeat: -1,
     });
 
+    // Camera
+    // this.cameras.main.setBounds(0, 0, 400, 200); // Adjust the bounds to fit your game's dimensions
+    // this.physics.world.setBounds(0, 0, 400, 200); // Adjust the bounds to fit your game's dimensions
+    // this.cameras.main.startFollow(this.player);
+
     //  Input Events
     if (this.input.keyboard) {
       this.cursors = this.input.keyboard.createCursorKeys();
@@ -243,7 +248,7 @@ export default class GameScene extends Phaser.Scene {
       if (this.player.body) {
         if (
           (this.cursors.space.isDown || this.cursors.up.isDown) &&
-          this.player.body.touching.down
+          this.player.body.blocked.down
         ) {
           if (this.hasMoved === false) {
             this.hasMoved = true;
