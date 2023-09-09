@@ -16,7 +16,18 @@ export default class GameScene extends Phaser.Scene {
   hasMoved: boolean;
   gameOver: boolean;
 
-  // Tools
+  // Gameplay
+  initialPlayerPositionX: number;
+  initialPlayerPositionY: number;
+  playerVelocityX: number;
+  playerVelocityY: number;
+  playerBounce: number;
+  totalStars: number;
+  bombBaseVelocityX: number;
+  bombVelocityMultiplierX: number;
+  bombVelocityY: number;
+
+  // Controls
   cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
 
   // Images
@@ -39,6 +50,7 @@ export default class GameScene extends Phaser.Scene {
 
   constructor() {
     super({ key: "GameScene" });
+    // Game state
     this.score = 0;
     this.lives = 3;
     this.round = 0;
@@ -46,6 +58,18 @@ export default class GameScene extends Phaser.Scene {
     this.hasStarted = false;
     this.hasMoved = false;
     this.gameOver = false;
+    // Player
+    this.initialPlayerPositionX = 20;
+    this.initialPlayerPositionY = 150;
+    this.playerVelocityX = 90;
+    this.playerVelocityY = 200;
+    this.playerBounce = 0.2;
+    // Stars
+    this.totalStars = 10;
+    // Bombs
+    this.bombBaseVelocityX = 25;
+    this.bombVelocityMultiplierX = 5;
+    this.bombVelocityY = 20;
   }
 
   preload() {
@@ -102,10 +126,14 @@ export default class GameScene extends Phaser.Scene {
     this.hello.setVisible(false);
 
     // The player and its settings
-    this.player = this.physics.add.sprite(20, 150, "character");
+    this.player = this.physics.add.sprite(
+      this.initialPlayerPositionX,
+      this.initialPlayerPositionY,
+      "character"
+    );
 
     //  Player physics properties
-    this.player.setBounce(0.2);
+    this.player.setBounce(this.playerBounce);
     this.player.setCollideWorldBounds(true);
 
     //  Player animations, turning, walking left and walking right.
@@ -141,7 +169,7 @@ export default class GameScene extends Phaser.Scene {
       repeat: -1,
     });
 
-    // Camera
+    // Camera;
     // this.cameras.main.setBounds(0, 0, 400, 200); // Adjust the bounds to fit your game's dimensions
     // this.physics.world.setBounds(0, 0, 400, 200); // Adjust the bounds to fit your game's dimensions
     // this.cameras.main.startFollow(this.player);
@@ -154,7 +182,7 @@ export default class GameScene extends Phaser.Scene {
     //  Stars to collect, 10 in total, evenly spaced 20 pixels apart along the x axis
     this.stars = this.physics.add.group({
       key: "star",
-      repeat: 9,
+      repeat: this.totalStars - 1,
       setXY: { x: 10, y: 0, stepX: 20 },
     });
 
@@ -225,7 +253,7 @@ export default class GameScene extends Phaser.Scene {
         if (this.direction !== "left") {
           this.direction = "left";
         }
-        this.player.setVelocityX(-90);
+        this.player.setVelocityX(-this.playerVelocityX);
         this.player.anims.play("left", true);
       } else if (this.cursors.right.isDown) {
         if (this.hasMoved === false) {
@@ -234,7 +262,7 @@ export default class GameScene extends Phaser.Scene {
         if (this.direction !== "right") {
           this.direction = "right";
         }
-        this.player.setVelocityX(90);
+        this.player.setVelocityX(this.playerVelocityX);
         this.player.anims.play("right", true);
       } else {
         this.player.setVelocityX(0);
@@ -253,7 +281,7 @@ export default class GameScene extends Phaser.Scene {
           if (this.hasMoved === false) {
             this.hasMoved = true;
           }
-          this.player.setVelocityY(-200);
+          this.player.setVelocityY(-this.playerVelocityY);
         }
       }
     }
@@ -286,22 +314,28 @@ export default class GameScene extends Phaser.Scene {
       }
 
       // Add a bomb
-      const playerSprite = player as Phaser.Physics.Arcade.Sprite;
-
-      let x =
-        playerSprite.x < 100
-          ? Phaser.Math.Between(150, 200)
-          : Phaser.Math.Between(0, 50);
-
-      let bomb = this.bombs.create(x, 4, "bomb");
-      bomb.setBounce(1);
-      bomb.setCollideWorldBounds(true);
-      bomb.setVelocity(
-        Phaser.Math.Between(-25 - this.round * 5, 25 + this.round * 5),
-        20
-      );
-      bomb.allowGravity = false;
+      this.addBomb();
     }
+  }
+
+  addBomb() {
+    const playerSprite = this.player as Phaser.Physics.Arcade.Sprite;
+
+    let x =
+      playerSprite.x < 100
+        ? Phaser.Math.Between(150, 200)
+        : Phaser.Math.Between(0, 50);
+
+    let bomb = this.bombs.create(x, 4, "bomb");
+    bomb.setBounce(1);
+    bomb.setCollideWorldBounds(true);
+    bomb.setVelocity(
+      Phaser.Math.Between(
+        -this.bombBaseVelocityX - this.round * this.bombVelocityMultiplierX,
+        this.bombBaseVelocityX + this.round * this.bombVelocityMultiplierX
+      ),
+      this.bombVelocityY
+    );
   }
 
   // What happens when the player hits a bomb
@@ -373,7 +407,10 @@ export default class GameScene extends Phaser.Scene {
         this.scoreText.setText("SCORE " + this.score);
         playerSprite.clearTint();
         this.player.setVelocityY(0);
-        this.player.setPosition(20, 150);
+        this.player.setPosition(
+          this.initialPlayerPositionX,
+          this.initialPlayerPositionY
+        );
         this.heart3.setVisible(true);
         this.heart2.setVisible(true);
         this.heart1.setVisible(true);

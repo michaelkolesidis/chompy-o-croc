@@ -17,11 +17,13 @@ export default class StartScene extends Phaser.Scene {
   }
 
   preload() {
+    // Fonts
     this.load.bitmapFont(
       "Thick",
       "./assets/fonts/thick_8x8.png",
       "./assets/fonts/thick_8x8.xml"
     );
+    // Images
     this.load.image("sky", "./assets/images/sky.png");
     this.load.image("running", "./assets/images/running.png");
   }
@@ -41,6 +43,8 @@ export default class StartScene extends Phaser.Scene {
     );
     this.titleShadow.setTint(0x000000);
     this.title = this.add.bitmapText(30, 20, "Thick", "CHOMPY\nO'CROC", 30, 1);
+
+    // Character
     this.running = this.add.image(87, 12, "running").setScale(1);
 
     // Prompt
@@ -54,12 +58,6 @@ export default class StartScene extends Phaser.Scene {
       repeat: -1, // Repeat indefinitely
     });
 
-    document.addEventListener("keydown", (e) => {
-      if (e.code === "Enter") {
-        this.scene.start("GameScene");
-      }
-    });
-
     // Copyright
     this.copyright = this.add.bitmapText(
       8,
@@ -68,5 +66,12 @@ export default class StartScene extends Phaser.Scene {
       "(C)2023 Michael Kolesidis",
       10
     );
+
+    // Event handling
+    document.addEventListener("keydown", (e) => {
+      if (e.code === "Enter") {
+        this.scene.start("GameScene");
+      }
+    });
   }
 }

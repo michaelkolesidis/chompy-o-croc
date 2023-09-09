@@ -2,6 +2,8 @@
 
 - Dead player loses tint
 - Artifacts in score characters
+
+## Fixed bugs
 - Ability to jump on stars and bombs
 
 ## Features
@@ -10,24 +12,24 @@
 
 #### Sprites
 
--Fruits
--Pizza
+- Fruits
+- Pizza
 
 #### Points
 
--100
--200
--300
--400
--500
+- 100
+- 200
+- 300
+- 400
+- 500
 
 #### Types
 
--Increase speed (from 90 to 120)
--Remove all bombs
--Slow down bombs
--Earn twice as much points
--Double score
+- Increase speed (from 90 to 120)
+- Remove all bombs
+- Slow down bombs
+- Earn twice as much points
+- Double score
 
 ### Sound effects
 
@@ -38,4 +40,4 @@
 
 ### High Score
 
-Save high score in local storage and display it on the start screen.
+- Save high score in local storage and display it on the start screen.
