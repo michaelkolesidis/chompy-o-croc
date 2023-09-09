@@ -289,9 +289,9 @@ export default class GameScene extends Phaser.Scene {
 
   // What happens when the player collects a star
   collectStar(
-    player:
-      | Phaser.Types.Physics.Arcade.GameObjectWithBody
-      | Phaser.Tilemaps.Tile,
+    // player:
+    //   | Phaser.Types.Physics.Arcade.GameObjectWithBody
+    //   | Phaser.Tilemaps.Tile,
     star: Phaser.Types.Physics.Arcade.GameObjectWithBody | Phaser.Tilemaps.Tile
   ) {
     const starSprite = star as Phaser.Physics.Arcade.Sprite;
