@@ -1,6 +1,7 @@
 {
   "name": "chompy-o-croc",
   "author": "Michael Kolesidis",
+  "description": "2D arcade/platform game created in the style of pixel art",
   "license": "UNLICENSED",
   "version": "0.0.0",
   "type": "module",

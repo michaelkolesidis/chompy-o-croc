@@ -44,6 +44,17 @@ After **Round 3**, and **every second round**, a piece of food enters the game a
 
 **Removes all bombs** from the level.
 
+## Controls
+
+The game is played exclusively with the keyboard.
+
+|      Key(s)      | Action             |
+| :--------------: | ------------------ |
+|    Left Arrow    | Move Left          |
+|   Right Arrow    | Move Right         |
+| Up Arrow / Space | Jump               |
+|      Enter       | Game start/restart |
+
 ## Screenshots
 
 ![1](./screenshots/screenshot-1.png)
