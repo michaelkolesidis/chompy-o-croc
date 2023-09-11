@@ -12,8 +12,12 @@ export default class StartScene extends Phaser.Scene {
   promptText!: Phaser.GameObjects.BitmapText;
   blinkTween!: Phaser.Tweens.Tween;
 
+  // Game state
+  intoGame: boolean;
+
   constructor() {
     super({ key: "StartScene" });
+    this.intoGame = false;
   }
 
   preload() {
@@ -70,7 +74,11 @@ export default class StartScene extends Phaser.Scene {
     // Event handling
     document.addEventListener("keydown", (e) => {
       if (e.code === "Enter") {
-        this.scene.start("GameScene");
+        if (this.intoGame !== true) {
+          this.scene.start("GameScene");
+        }
+
+        this.intoGame = true;
       }
     });
   }

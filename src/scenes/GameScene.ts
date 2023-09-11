@@ -5,6 +5,8 @@ export default class GameScene extends Phaser.Scene {
   player!: Phaser.Physics.Arcade.Sprite;
   stars!: Phaser.Physics.Arcade.Group;
   bombs!: Phaser.Physics.Arcade.Group;
+  oranges!: Phaser.Physics.Arcade.Group;
+  bananas!: Phaser.Physics.Arcade.Group;
   platforms!: Phaser.Physics.Arcade.StaticGroup;
 
   // Game state
@@ -26,6 +28,9 @@ export default class GameScene extends Phaser.Scene {
   bombBaseVelocityX: number;
   bombVelocityMultiplierX: number;
   bombVelocityY: number;
+  foodMinVelocityX: number;
+  foodMaxVelocityX: number;
+  foodVelocityY: number;
 
   // Controls
   cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -70,6 +75,10 @@ export default class GameScene extends Phaser.Scene {
     this.bombBaseVelocityX = 25;
     this.bombVelocityMultiplierX = 5;
     this.bombVelocityY = 20;
+    // Food
+    this.foodMinVelocityX = 10;
+    this.foodMaxVelocityX = 30;
+    this.foodVelocityY = 10;
   }
 
   preload() {
@@ -84,6 +93,8 @@ export default class GameScene extends Phaser.Scene {
     this.load.image("ground", "./assets/images/platform.png");
     this.load.image("star", "./assets/images/star.png");
     this.load.image("bomb", "./assets/images/bomb.png");
+    this.load.image("orange", "./assets/images/orange.png");
+    this.load.image("banana", "./assets/images/banana.png");
     this.load.image("heart", "./assets/images/heart.png");
     this.load.image("hello", "./assets/images/hello.png");
     // Spritesheets
@@ -193,8 +204,12 @@ export default class GameScene extends Phaser.Scene {
       child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
     });
 
-    // The bombs group
+    // Bombs to avoid
     this.bombs = this.physics.add.group();
+
+    // Food to eat for power-ups
+    this.oranges = this.physics.add.group();
+    this.bananas = this.physics.add.group();
 
     //  The score
     this.scoreText = this.add.bitmapText(8, 8, "Thick", "SCORE 0", 12);
@@ -203,8 +218,10 @@ export default class GameScene extends Phaser.Scene {
     this.physics.add.collider(this.player, this.platforms);
     this.physics.add.collider(this.stars, this.platforms);
     this.physics.add.collider(this.bombs, this.platforms);
+    this.physics.add.collider(this.oranges, this.platforms);
+    this.physics.add.collider(this.bananas, this.platforms);
 
-    //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
+    //  Checks to see if the player overlaps stars, bombs, or food, if he does call the respective collect/hit function
     this.physics.add.overlap(
       this.player,
       this.stars,
@@ -216,6 +233,20 @@ export default class GameScene extends Phaser.Scene {
       this.player,
       this.bombs,
       this.hitBomb,
+      undefined,
+      this
+    );
+    this.physics.add.overlap(
+      this.player,
+      this.oranges,
+      this.collectOrange,
+      undefined,
+      this
+    );
+    this.physics.add.overlap(
+      this.player,
+      this.bananas,
+      this.collectBanana,
       undefined,
       this
     );
@@ -315,6 +346,11 @@ export default class GameScene extends Phaser.Scene {
 
       // Add a bomb
       this.addBomb();
+
+      // Add food
+      if (this.round > 3 && this.round % 2 === 0) {
+        this.addFood();
+      }
     }
   }
 
@@ -346,7 +382,7 @@ export default class GameScene extends Phaser.Scene {
     // Subract a life
     this.lives -= 1;
 
-    // Tint the player for a second
+    // Tint the player for half a second
     const playerSprite = player as Phaser.Physics.Arcade.Sprite;
 
     if (this.lives !== 0) {
@@ -376,6 +412,87 @@ export default class GameScene extends Phaser.Scene {
     }
   }
 
+  addFood() {
+    const randomNumber = Math.random();
+    if (randomNumber < 0.3) {
+      this.addOrange();
+    } else {
+      this.addBanana();
+    }
+  }
+
+  addOrange() {
+    let orange = this.oranges.create(Phaser.Math.Between(0, 200), 5, "orange");
+    orange.setBounce(1);
+    orange.setCollideWorldBounds(true);
+    orange.setVelocity(
+      Phaser.Math.Between(this.foodMinVelocityX, this.foodMaxVelocityX),
+      this.foodVelocityY
+    );
+
+    const orangeSprite = orange as Phaser.Physics.Arcade.Sprite;
+
+    setTimeout(() => {
+      orangeSprite.disableBody(true, true);
+    }, 3000);
+  }
+
+  addBanana() {
+    let banana = this.bananas.create(Phaser.Math.Between(0, 200), 4, "banana");
+    banana.setBounce(1);
+    banana.setCollideWorldBounds(true);
+    banana.setVelocity(
+      Phaser.Math.Between(this.foodMinVelocityX, this.foodMaxVelocityX),
+      this.foodVelocityY
+    );
+
+    const bananaSprite = banana as Phaser.Physics.Arcade.Sprite;
+
+    setTimeout(() => {
+      bananaSprite.disableBody(true, true);
+    }, 3000);
+  }
+
+  collectOrange(
+    player:
+      | Phaser.Types.Physics.Arcade.GameObjectWithBody
+      | Phaser.Tilemaps.Tile,
+    orange:
+      | Phaser.Types.Physics.Arcade.GameObjectWithBody
+      | Phaser.Tilemaps.Tile
+  ) {
+    const orangeSprite = orange as Phaser.Physics.Arcade.Sprite;
+    orangeSprite.disableBody(true, true);
+
+    const playerSprite = player as Phaser.Physics.Arcade.Sprite;
+
+    const bombChildren =
+      this.bombs.getChildren() as Phaser.Physics.Arcade.Sprite[];
+    for (const child of bombChildren) {
+      child.disableBody(true, true);
+    }
+  }
+
+  collectBanana(
+    player:
+      | Phaser.Types.Physics.Arcade.GameObjectWithBody
+      | Phaser.Tilemaps.Tile,
+    banana:
+      | Phaser.Types.Physics.Arcade.GameObjectWithBody
+      | Phaser.Tilemaps.Tile
+  ) {
+    const bananaSprite = banana as Phaser.Physics.Arcade.Sprite;
+    bananaSprite.disableBody(true, true);
+
+    const playerSprite = player as Phaser.Physics.Arcade.Sprite;
+
+    if (this.lives < 3) {
+      this.lives = 3;
+      this.heart3.setVisible(true);
+      this.heart2.setVisible(true);
+    }
+  }
+
   // Endgame
   endGame(player: Phaser.GameObjects.GameObject) {
     const playerSprite = player as Phaser.Physics.Arcade.Sprite;
@@ -397,38 +514,43 @@ export default class GameScene extends Phaser.Scene {
 
     document.addEventListener("keydown", (e) => {
       if (this.gameOver === true && e.code === "Enter") {
-        // this.soundtrack.stop();
-        this.gameOver = false;
-        this.round = 0;
-        this.direction = "right";
-        this.physics.resume();
-        this.lives = 3;
-        this.score = 0;
-        this.scoreText.setText("SCORE " + this.score);
-        playerSprite.clearTint();
-        this.player.setVelocityY(0);
-        this.player.setPosition(
-          this.initialPlayerPositionX,
-          this.initialPlayerPositionY
-        );
-        this.heart3.setVisible(true);
-        this.heart2.setVisible(true);
-        this.heart1.setVisible(true);
-        this.gameOverText.setVisible(false);
-        this.restartText.setVisible(false);
-
-        const bombChildren =
-          this.bombs.getChildren() as Phaser.Physics.Arcade.Sprite[];
-        for (const child of bombChildren) {
-          child.disableBody(true, true);
-        }
-
-        const starChildren =
-          this.stars.getChildren() as Phaser.Physics.Arcade.Sprite[];
-        for (const child of starChildren) {
-          child.enableBody(true, child.x, 0, true, true);
-        }
+        this.restart(this.player);
       }
     });
+  }
+
+  restart(player: Phaser.GameObjects.GameObject) {
+    const playerSprite = player as Phaser.Physics.Arcade.Sprite;
+    this.soundtrack.play();
+    this.gameOver = false;
+    this.round = 0;
+    this.direction = "right";
+    this.physics.resume();
+    this.lives = 3;
+    this.score = 0;
+    this.scoreText.setText("SCORE " + this.score);
+    playerSprite.clearTint();
+    this.player.setVelocityY(0);
+    this.player.setPosition(
+      this.initialPlayerPositionX,
+      this.initialPlayerPositionY
+    );
+    this.heart3.setVisible(true);
+    this.heart2.setVisible(true);
+    this.heart1.setVisible(true);
+    this.gameOverText.setVisible(false);
+    this.restartText.setVisible(false);
+
+    const bombChildren =
+      this.bombs.getChildren() as Phaser.Physics.Arcade.Sprite[];
+    for (const child of bombChildren) {
+      child.disableBody(true, true);
+    }
+
+    const starChildren =
+      this.stars.getChildren() as Phaser.Physics.Arcade.Sprite[];
+    for (const child of starChildren) {
+      child.enableBody(true, child.x, 0, true, true);
+    }
   }
 }
