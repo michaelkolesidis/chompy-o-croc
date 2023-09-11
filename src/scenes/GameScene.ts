@@ -431,7 +431,6 @@ export default class GameScene extends Phaser.Scene {
     );
 
     const orangeSprite = orange as Phaser.Physics.Arcade.Sprite;
-
     setTimeout(() => {
       orangeSprite.disableBody(true, true);
     }, 3000);
@@ -447,7 +446,6 @@ export default class GameScene extends Phaser.Scene {
     );
 
     const bananaSprite = banana as Phaser.Physics.Arcade.Sprite;
-
     setTimeout(() => {
       bananaSprite.disableBody(true, true);
     }, 3000);
@@ -544,6 +542,18 @@ export default class GameScene extends Phaser.Scene {
     const bombChildren =
       this.bombs.getChildren() as Phaser.Physics.Arcade.Sprite[];
     for (const child of bombChildren) {
+      child.disableBody(true, true);
+    }
+
+    const orangeChildren =
+      this.oranges.getChildren() as Phaser.Physics.Arcade.Sprite[];
+    for (const child of orangeChildren) {
+      child.disableBody(true, true);
+    }
+
+    const bananaChildren =
+      this.bananas.getChildren() as Phaser.Physics.Arcade.Sprite[];
+    for (const child of bananaChildren) {
       child.disableBody(true, true);
     }
 
