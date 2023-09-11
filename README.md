@@ -30,7 +30,7 @@ Bombs **bounce around the level** at a random speed. Whenever the player is touc
 
 ### Food
 
-After **Round 3**, and **every second round**, a piece of food enters the game along with the bomb, that serves as power-up. There are currently two power-ups:
+After **Round 3**, and **every second round**, a piece of food enters the game along with the bomb, that serves as power-up. Be fast as food disappears after a few seconds! There are currently two power-ups:
 
 #### Banana
 

@@ -72,9 +72,9 @@ export default class GameScene extends Phaser.Scene {
     // Stars
     this.totalStars = 10;
     // Bombs
-    this.bombBaseVelocityX = 25;
-    this.bombVelocityMultiplierX = 5;
-    this.bombVelocityY = 20;
+    this.bombBaseVelocityX = 20;
+    this.bombVelocityMultiplierX = 3;
+    this.bombVelocityY = 15;
     // Food
     this.foodMinVelocityX = 10;
     this.foodMaxVelocityX = 30;
@@ -499,6 +499,24 @@ export default class GameScene extends Phaser.Scene {
 
     playerSprite.setTint(0xff5555);
 
+    playerSprite.setScale(1, -1);
+
+    const falling = this.tweens.add({
+      targets: playerSprite,
+      y: 220,
+      duration: 4000,
+      ease: "Bounce",
+    });
+
+    // Stop falling animation when restarting the game
+    if (this.input.keyboard) {
+      this.input.keyboard.on("keydown-ENTER", function () {
+        if (falling.isPlaying()) {
+          falling.stop();
+        }
+      });
+    }
+
     if (this.direction === "left") {
       this.player.anims.play("turnLeft");
     } else if (this.direction === "right") {
@@ -519,6 +537,7 @@ export default class GameScene extends Phaser.Scene {
 
   restart(player: Phaser.GameObjects.GameObject) {
     const playerSprite = player as Phaser.Physics.Arcade.Sprite;
+    playerSprite.setScale(1, 1);
     this.soundtrack.play();
     this.gameOver = false;
     this.round = 0;
