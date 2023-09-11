@@ -454,7 +454,7 @@ export default class GameScene extends Phaser.Scene {
   }
 
   collectOrange(
-    player:
+    _player:
       | Phaser.Types.Physics.Arcade.GameObjectWithBody
       | Phaser.Tilemaps.Tile,
     orange:
@@ -464,7 +464,7 @@ export default class GameScene extends Phaser.Scene {
     const orangeSprite = orange as Phaser.Physics.Arcade.Sprite;
     orangeSprite.disableBody(true, true);
 
-    const playerSprite = player as Phaser.Physics.Arcade.Sprite;
+    // const playerSprite = player as Phaser.Physics.Arcade.Sprite;
 
     const bombChildren =
       this.bombs.getChildren() as Phaser.Physics.Arcade.Sprite[];
@@ -474,7 +474,7 @@ export default class GameScene extends Phaser.Scene {
   }
 
   collectBanana(
-    player:
+    _player:
       | Phaser.Types.Physics.Arcade.GameObjectWithBody
       | Phaser.Tilemaps.Tile,
     banana:
@@ -484,7 +484,7 @@ export default class GameScene extends Phaser.Scene {
     const bananaSprite = banana as Phaser.Physics.Arcade.Sprite;
     bananaSprite.disableBody(true, true);
 
-    const playerSprite = player as Phaser.Physics.Arcade.Sprite;
+    // const playerSprite = player as Phaser.Physics.Arcade.Sprite;
 
     if (this.lives < 3) {
       this.lives = 3;
