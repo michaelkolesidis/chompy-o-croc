@@ -6,6 +6,8 @@
 
 _Chompy O'Croc_ is a 2D arcade/platform game created in the style of pixel art.
 
+<a href='https://ko-fi.com/michaelkolesidis' target='_blank'><img src='https://cdn.ko-fi.com/cdn/kofi1.png' style='border:0px;height:45px;' alt='Buy Me a Coffee at ko-fi.com' /></a>
+
 ## Technologies
 
 The game was made with [Phaser](https://phaser.io/), [Vite](https://vitejs.dev/), and [TypeScript](https://www.typescriptlang.org/).
@@ -67,6 +69,12 @@ The game is played exclusively with the keyboard.
 - I created all the pixel art used in the game using [LibreSprite](https://libresprite.github.io/#!/).
 - The character, the platforms and the stars were adapted from an image featured in the homepage of [Aseprite](https://www.aseprite.org/), with me adding the character's animation frames.
 - The game is based on a tutorial found in the official [Phaser website](https://phaser.io/tutorials/making-your-first-phaser-3-game).
+
+## 💖 Support the Project
+
+Thank you so much for your interest in my project! If you want to go a step further and support my work, buy me a coffee:
+
+<a href='https://ko-fi.com/michaelkolesidis' target='_blank'><img src='https://cdn.ko-fi.com/cdn/kofi1.png' style='border:0px;height:45px;' alt='Buy Me a Coffee at ko-fi.com' /></a>
 
 ## Copyright
 
