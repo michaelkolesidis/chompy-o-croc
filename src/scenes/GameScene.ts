@@ -225,6 +225,7 @@ export default class GameScene extends Phaser.Scene {
     this.physics.add.overlap(
       this.player,
       this.stars,
+      // @ts-ignore
       this.collectStar,
       undefined,
       this
@@ -232,6 +233,7 @@ export default class GameScene extends Phaser.Scene {
     this.physics.add.collider(
       this.player,
       this.bombs,
+      // @ts-ignore
       this.hitBomb,
       undefined,
       this
@@ -239,6 +241,7 @@ export default class GameScene extends Phaser.Scene {
     this.physics.add.overlap(
       this.player,
       this.oranges,
+      // @ts-ignore
       this.collectOrange,
       undefined,
       this
@@ -246,6 +249,7 @@ export default class GameScene extends Phaser.Scene {
     this.physics.add.overlap(
       this.player,
       this.bananas,
+      // @ts-ignore
       this.collectBanana,
       undefined,
       this
