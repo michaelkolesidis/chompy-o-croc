@@ -1,0 +1,1 @@
+yarn add phaser && yarn add -D @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint typescript vite

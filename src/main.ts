@@ -1,7 +1,7 @@
-import Phaser from "phaser";
-import StartScene from "./scenes/StartScene";
-import GameScene from "./scenes/GameScene";
-import "./style.css";
+import Phaser from 'phaser';
+import StartScene from './scenes/StartScene';
+import GameScene from './scenes/GameScene';
+import './style.css';
 
 // https://newdocs.phaser.io/docs/3.60.0/Phaser.Types.Core.GameConfig
 
@@ -18,9 +18,9 @@ const config: Phaser.Types.Core.GameConfig = {
     mode: Phaser.Scale.ScaleModes.FIT,
   },
   physics: {
-    default: "arcade",
+    default: 'arcade',
     arcade: {
-      gravity: { y: 300 },
+      gravity: { x:0, y: 300 },
       debug: false,
     },
   },

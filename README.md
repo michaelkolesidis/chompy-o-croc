@@ -78,4 +78,4 @@ Thank you so much for your interest in my project! If you want to go a step furt
 
 ## Copyright
 
-© 2023 Michael Kolesidis
+© Michael Kolesidis

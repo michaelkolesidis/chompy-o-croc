@@ -1,4 +1,4 @@
-import Phaser from "phaser";
+import Phaser from 'phaser';
 
 export default class GameScene extends Phaser.Scene {
   // Game elements
@@ -13,7 +13,7 @@ export default class GameScene extends Phaser.Scene {
   score: number;
   lives: number;
   round: number;
-  direction: "left" | "right";
+  direction: 'left' | 'right';
   hasStarted: boolean;
   hasMoved: boolean;
   gameOver: boolean;
@@ -54,12 +54,12 @@ export default class GameScene extends Phaser.Scene {
     | Phaser.Sound.WebAudioSound;
 
   constructor() {
-    super({ key: "GameScene" });
+    super({ key: 'GameScene' });
     // Game state
     this.score = 0;
     this.lives = 3;
     this.round = 0;
-    this.direction = "right";
+    this.direction = 'right';
     this.hasStarted = false;
     this.hasMoved = false;
     this.gameOver = false;
@@ -84,63 +84,63 @@ export default class GameScene extends Phaser.Scene {
   preload() {
     // Fonts
     this.load.bitmapFont(
-      "Thick",
-      "./assets/fonts/thick_8x8.png",
-      "./assets/fonts/thick_8x8.xml"
+      'Thick',
+      './assets/fonts/thick_8x8.png',
+      './assets/fonts/thick_8x8.xml'
     );
     // Images
-    this.load.image("sky", "./assets/images/sky.png");
-    this.load.image("ground", "./assets/images/platform.png");
-    this.load.image("star", "./assets/images/star.png");
-    this.load.image("bomb", "./assets/images/bomb.png");
-    this.load.image("orange", "./assets/images/orange.png");
-    this.load.image("banana", "./assets/images/banana.png");
-    this.load.image("heart", "./assets/images/heart.png");
-    this.load.image("hello", "./assets/images/hello.png");
+    this.load.image('sky', './assets/images/sky.png');
+    this.load.image('ground', './assets/images/platform.png');
+    this.load.image('star', './assets/images/star.png');
+    this.load.image('bomb', './assets/images/bomb.png');
+    this.load.image('orange', './assets/images/orange.png');
+    this.load.image('banana', './assets/images/banana.png');
+    this.load.image('heart', './assets/images/heart.png');
+    this.load.image('hello', './assets/images/hello.png');
     // Spritesheets
-    this.load.spritesheet("character", "./assets/images/character.png", {
+    this.load.spritesheet('character', './assets/images/character.png', {
       frameWidth: 18,
       frameHeight: 17,
     });
     // Audio
-    this.load.audio("soundtrack", "./assets/audio/soundtrack.mp3");
+    this.load.audio('soundtrack', './assets/audio/soundtrack.mp3');
   }
 
   create() {
     // Soundtrack
-    this.soundtrack = this.sound.add("soundtrack");
+    this.soundtrack = this.sound.add('soundtrack');
     this.soundtrack.loop = true;
     this.soundtrack.volume = 0.85;
     this.soundtrack.play();
 
     //  Background
-    this.background = this.add.image(0, 0, "sky").setOrigin(0, 0);
+    this.background = this.add.image(0, 0, 'sky').setOrigin(0, 0);
 
     //  The platforms group contains the ground and the 3 ledges we can jump on
     this.platforms = this.physics.add.staticGroup();
 
     //  Ground
-    this.platforms.create(100, 197, "ground");
+    this.platforms.create(100, 197, 'ground');
 
     //  Ledges
-    this.platforms.create(200, 135, "ground");
-    this.platforms.create(-40, 100, "ground");
-    this.platforms.create(240, 75, "ground");
+    this.platforms.create(200, 135, 'ground');
+    this.platforms.create(-40, 100, 'ground');
+    this.platforms.create(240, 75, 'ground');
 
     // Lives
-    this.heart1 = this.add.image(186, 12, "heart");
-    this.heart2 = this.add.image(166, 12, "heart");
-    this.heart3 = this.add.image(146, 12, "heart");
+    this.heart1 = this.add.image(186, 12, 'heart');
+    this.heart2 = this.add.image(166, 12, 'heart');
+    this.heart3 = this.add.image(146, 12, 'heart');
 
     // Hello
-    this.hello = this.add.image(35, 165, "hello");
+    this.hello = this.add.image(35, 165, 'hello');
     this.hello.setVisible(false);
 
     // The player and its settings
     this.player = this.physics.add.sprite(
       this.initialPlayerPositionX,
       this.initialPlayerPositionY,
-      "character"
+      'character'
     );
 
     //  Player physics properties
@@ -149,8 +149,8 @@ export default class GameScene extends Phaser.Scene {
 
     //  Player animations, turning, walking left and walking right.
     this.anims.create({
-      key: "left",
-      frames: this.anims.generateFrameNumbers("character", {
+      key: 'left',
+      frames: this.anims.generateFrameNumbers('character', {
         start: 0,
         end: 3,
       }),
@@ -159,20 +159,20 @@ export default class GameScene extends Phaser.Scene {
     });
 
     this.anims.create({
-      key: "turnLeft",
-      frames: [{ key: "character", frame: 4 }],
+      key: 'turnLeft',
+      frames: [{ key: 'character', frame: 4 }],
       frameRate: 20,
     });
 
     this.anims.create({
-      key: "turnRight",
-      frames: [{ key: "character", frame: 5 }],
+      key: 'turnRight',
+      frames: [{ key: 'character', frame: 5 }],
       frameRate: 20,
     });
 
     this.anims.create({
-      key: "right",
-      frames: this.anims.generateFrameNumbers("character", {
+      key: 'right',
+      frames: this.anims.generateFrameNumbers('character', {
         start: 6,
         end: 9,
       }),
@@ -192,7 +192,7 @@ export default class GameScene extends Phaser.Scene {
 
     //  Stars to collect, 10 in total, evenly spaced 20 pixels apart along the x axis
     this.stars = this.physics.add.group({
-      key: "star",
+      key: 'star',
       repeat: this.totalStars - 1,
       setXY: { x: 10, y: 0, stepX: 20 },
     });
@@ -212,7 +212,7 @@ export default class GameScene extends Phaser.Scene {
     this.bananas = this.physics.add.group();
 
     //  The score
-    this.scoreText = this.add.bitmapText(8, 8, "Thick", "SCORE 0", 12);
+    this.scoreText = this.add.bitmapText(8, 8, 'Thick', 'SCORE 0', 12);
 
     //  Collide the player and the stars with the platforms
     this.physics.add.collider(this.player, this.platforms);
@@ -252,14 +252,14 @@ export default class GameScene extends Phaser.Scene {
     );
 
     // Game over texts
-    this.gameOverText = this.add.bitmapText(40, 70, "Thick", "GAME OVER", 17);
+    this.gameOverText = this.add.bitmapText(40, 70, 'Thick', 'GAME OVER', 17);
     this.gameOverText.setVisible(false);
 
     this.restartText = this.add.bitmapText(
       53,
       95,
-      "Thick",
-      "PRESS ENTER\nTO RESTART",
+      'Thick',
+      'PRESS ENTER\nTO RESTART',
       11
     );
     this.restartText.setVisible(false);
@@ -281,26 +281,26 @@ export default class GameScene extends Phaser.Scene {
         if (this.hasMoved === false) {
           this.hasMoved = true;
         }
-        if (this.direction !== "left") {
-          this.direction = "left";
+        if (this.direction !== 'left') {
+          this.direction = 'left';
         }
         this.player.setVelocityX(-this.playerVelocityX);
-        this.player.anims.play("left", true);
+        this.player.anims.play('left', true);
       } else if (this.cursors.right.isDown) {
         if (this.hasMoved === false) {
           this.hasMoved = true;
         }
-        if (this.direction !== "right") {
-          this.direction = "right";
+        if (this.direction !== 'right') {
+          this.direction = 'right';
         }
         this.player.setVelocityX(this.playerVelocityX);
-        this.player.anims.play("right", true);
+        this.player.anims.play('right', true);
       } else {
         this.player.setVelocityX(0);
-        if (this.direction === "left") {
-          this.player.anims.play("turnLeft");
-        } else if (this.direction === "right") {
-          this.player.anims.play("turnRight");
+        if (this.direction === 'left') {
+          this.player.anims.play('turnLeft');
+        } else if (this.direction === 'right') {
+          this.player.anims.play('turnRight');
         }
       }
 
@@ -330,7 +330,7 @@ export default class GameScene extends Phaser.Scene {
 
     //  Add and update the score
     this.score += 10 + Math.pow(this.round, 2);
-    this.scoreText.setText("SCORE " + this.score);
+    this.scoreText.setText('SCORE ' + this.score);
 
     if (this.stars.countActive(true) === 0) {
       // Next round
@@ -362,7 +362,7 @@ export default class GameScene extends Phaser.Scene {
         ? Phaser.Math.Between(150, 200)
         : Phaser.Math.Between(0, 50);
 
-    let bomb = this.bombs.create(x, 4, "bomb");
+    let bomb = this.bombs.create(x, 4, 'bomb');
     bomb.setBounce(1);
     bomb.setCollideWorldBounds(true);
     bomb.setVelocity(
@@ -422,7 +422,7 @@ export default class GameScene extends Phaser.Scene {
   }
 
   addOrange() {
-    let orange = this.oranges.create(Phaser.Math.Between(0, 200), 5, "orange");
+    let orange = this.oranges.create(Phaser.Math.Between(0, 200), 5, 'orange');
     orange.setBounce(1);
     orange.setCollideWorldBounds(true);
     orange.setVelocity(
@@ -437,7 +437,7 @@ export default class GameScene extends Phaser.Scene {
   }
 
   addBanana() {
-    let banana = this.bananas.create(Phaser.Math.Between(0, 200), 4, "banana");
+    let banana = this.bananas.create(Phaser.Math.Between(0, 200), 4, 'banana');
     banana.setBounce(1);
     banana.setCollideWorldBounds(true);
     banana.setVelocity(
@@ -505,22 +505,22 @@ export default class GameScene extends Phaser.Scene {
       targets: playerSprite,
       y: 220,
       duration: 4000,
-      ease: "Bounce",
+      ease: 'Bounce',
     });
 
     // Stop falling animation when restarting the game
     if (this.input.keyboard) {
-      this.input.keyboard.on("keydown-ENTER", function () {
+      this.input.keyboard.on('keydown-ENTER', function () {
         if (falling.isPlaying()) {
           falling.stop();
         }
       });
     }
 
-    if (this.direction === "left") {
-      this.player.anims.play("turnLeft");
-    } else if (this.direction === "right") {
-      this.player.anims.play("turnRight");
+    if (this.direction === 'left') {
+      this.player.anims.play('turnLeft');
+    } else if (this.direction === 'right') {
+      this.player.anims.play('turnRight');
     }
 
     this.soundtrack.stop();
@@ -528,8 +528,8 @@ export default class GameScene extends Phaser.Scene {
     this.gameOverText.setVisible(true);
     this.restartText.setVisible(true);
 
-    document.addEventListener("keydown", (e) => {
-      if (this.gameOver === true && e.code === "Enter") {
+    document.addEventListener('keydown', (e) => {
+      if (this.gameOver === true && e.code === 'Enter') {
         this.restart(this.player);
       }
     });
@@ -541,11 +541,11 @@ export default class GameScene extends Phaser.Scene {
     this.soundtrack.play();
     this.gameOver = false;
     this.round = 0;
-    this.direction = "right";
+    this.direction = 'right';
     this.physics.resume();
     this.lives = 3;
     this.score = 0;
-    this.scoreText.setText("SCORE " + this.score);
+    this.scoreText.setText('SCORE ' + this.score);
     playerSprite.clearTint();
     this.player.setVelocityY(0);
     this.player.setPosition(
